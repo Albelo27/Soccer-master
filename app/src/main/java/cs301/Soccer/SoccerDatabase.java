@@ -3,6 +3,9 @@ package cs301.Soccer;
 import android.util.Log;
 import cs301.Soccer.soccerPlayer.SoccerPlayer;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.*;
 
 /**
@@ -163,6 +166,7 @@ public class SoccerDatabase implements SoccerDB {
     // read data from file
     @Override
     public boolean readData(File file) {
+
         return file.exists();
     }
 
@@ -174,7 +178,26 @@ public class SoccerDatabase implements SoccerDB {
     // write data to file
     @Override
     public boolean writeData(File file) {
-        return false;
+        try {
+            PrintWriter wrt = new PrintWriter(new FileWriter(file));
+            Log.i("fileInfo:",file.getAbsolutePath());
+            Collection<Map.Entry<String, SoccerPlayer>> iteratorSet = database.entrySet();
+            SoccerPlayer currentPlayer;
+            for (Map.Entry<String, SoccerPlayer> entry : iteratorSet) {
+                currentPlayer = entry.getValue();
+                wrt.println(logString(currentPlayer.getFirstName()));
+                wrt.println(logString(currentPlayer.getLastName()));
+                wrt.println(logString(currentPlayer.getTeamName()));
+                wrt.println(logString(Integer.toString(currentPlayer.getUniform())));
+                wrt.println(logString(Integer.toString(currentPlayer.getGoals())));
+                wrt.println(logString(Integer.toString(currentPlayer.getGoals())));
+                wrt.println(logString(Integer.toString(currentPlayer.getGoals())));
+            }
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     /**
@@ -189,7 +212,6 @@ public class SoccerDatabase implements SoccerDB {
 
     /**
      * returns the list of team names in the database
-     *
      * @see cs301.Soccer.SoccerDB#getTeams()
      */
     // return list of teams
